@@ -1,0 +1,666 @@
+
+<style>
+:root { --gmn-green: #1a6b3a; --gmn-gold: #c8922a; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+.strategy-wrap { padding: 1rem 0 2rem; }
+
+.hero { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; border: 0.5px solid var(--color-border-tertiary); }
+.hero-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 8px; }
+.hero h1 { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+.hero-sub { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
+.hero-meta { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+.hero-badge { font-size: 12px; padding: 4px 10px; border-radius: var(--border-radius-md); background: var(--color-background-info); color: var(--color-text-info); }
+
+.nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 1.5rem; }
+.nav-btn { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 8px; text-align: center; cursor: pointer; transition: border-color 0.15s; }
+.nav-btn:hover { border-color: var(--color-border-secondary); }
+.nav-btn.active { border: 2px solid var(--color-border-info); }
+.nav-btn .nb-icon { font-size: 16px; margin-bottom: 4px; }
+.nav-btn .nb-label { font-size: 11px; color: var(--color-text-secondary); line-height: 1.3; }
+
+.section { display: none; }
+.section.active { display: block; }
+
+.sec-header { margin-bottom: 1.25rem; }
+.sec-header h2 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.sec-header p { font-size: 13px; color: var(--color-text-secondary); }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+.card h3 { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+.card p, .card li { font-size: 13px; color: var(--color-text-secondary); line-height: 1.65; }
+.card ul, .card ol { padding-left: 16px; }
+.card ul li, .card ol li { margin-bottom: 4px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; }
+.stat-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.stat-value { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+.stat-note { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+.badge { display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: var(--border-radius-md); margin-right: 4px; margin-bottom: 4px; }
+.badge-info { background: var(--color-background-info); color: var(--color-text-info); }
+.badge-success { background: var(--color-background-success); color: var(--color-text-success); }
+.badge-warn { background: var(--color-background-warning); color: var(--color-text-warning); }
+.badge-danger { background: var(--color-background-danger); color: var(--color-text-danger); }
+
+.phase-bar { display: flex; gap: 4px; margin-bottom: 12px; }
+.phase { flex: 1; padding: 8px 10px; border-radius: var(--border-radius-md); text-align: center; }
+.phase-label { font-size: 11px; font-weight: 500; margin-bottom: 2px; }
+.phase-sub { font-size: 10px; opacity: 0.8; }
+.phase-tofu { background: var(--color-background-info); color: var(--color-text-info); }
+.phase-mofu { background: var(--color-background-warning); color: var(--color-text-warning); }
+.phase-bofu { background: var(--color-background-success); color: var(--color-text-success); }
+
+.hook-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.hook-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.hook-num { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 3px; }
+.hook-text { font-size: 13px; color: var(--color-text-primary); line-height: 1.4; font-weight: 500; }
+
+.step-list { counter-reset: steps; }
+.step { display: flex; gap: 12px; margin-bottom: 12px; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--color-background-info); color: var(--color-text-info); font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-body { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+.step-body strong { color: var(--color-text-primary); font-weight: 500; }
+
+.divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 16px 0; }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 8px; }
+.cal-day { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px 6px; }
+.cal-day-label { font-size: 10px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 4px; }
+.cal-type { font-size: 10px; color: var(--color-text-primary); line-height: 1.4; }
+
+.funnel-vis { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.funnel-layer { border-radius: var(--border-radius-md); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+.fl-tofu { background: var(--color-background-info); }
+.fl-mofu { background: var(--color-background-warning); }
+.fl-bofu { background: var(--color-background-success); }
+.fl-left { font-size: 13px; font-weight: 500; }
+.fl-right { font-size: 12px; opacity: 0.8; }
+.fl-tofu .fl-left, .fl-tofu .fl-right { color: var(--color-text-info); }
+.fl-mofu .fl-left, .fl-mofu .fl-right { color: var(--color-text-warning); }
+.fl-bofu .fl-left, .fl-bofu .fl-right { color: var(--color-text-success); }
+
+.kpi-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.kpi-table th { text-align: left; font-weight: 500; font-size: 12px; color: var(--color-text-secondary); padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.kpi-table td { padding: 7px 8px; color: var(--color-text-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); }
+.kpi-table tr:last-child td { border-bottom: none; }
+.kpi-table .val { font-weight: 500; color: var(--color-text-primary); }
+
+.wa-chat { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 12px; }
+.wa-bubble { max-width: 85%; padding: 8px 12px; border-radius: 12px; margin-bottom: 6px; font-size: 13px; line-height: 1.5; }
+.wa-out { background: var(--color-background-success); color: var(--color-text-success); margin-left: auto; border-radius: 12px 12px 2px 12px; }
+.wa-in { background: var(--color-background-primary); color: var(--color-text-secondary); border-radius: 12px 12px 12px 2px; border: 0.5px solid var(--color-border-tertiary); }
+.wa-label { font-size: 10px; color: var(--color-text-tertiary); margin-bottom: 2px; }
+
+.scale-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.scale-box { background: var(--color-background-info); color: var(--color-text-info); border-radius: var(--border-radius-md); padding: 6px 12px; font-size: 13px; font-weight: 500; white-space: nowrap; }
+.scale-arrow { font-size: 14px; color: var(--color-text-tertiary); }
+.scale-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.4; }
+
+@media (max-width: 520px) {
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .hook-grid { grid-template-columns: 1fr; }
+  .cal-grid { grid-template-columns: repeat(4, 1fr); }
+}
+</style>
+
+<div class="strategy-wrap">
+  <div class="hero">
+    <div class="hero-tag">CMO Growth Strategy — Prepared for</div>
+    <h1>Green Media Network</h1>
+    <div class="hero-sub">Complete performance marketing playbook for scaling India's most trusted child talent agency to global reach. 7 sections. Fully implementation-ready.</div>
+    <div class="hero-meta">
+      <span class="hero-badge">Meta Ads</span>
+      <span class="hero-badge">Google Ads</span>
+      <span class="hero-badge">WhatsApp Funnel</span>
+      <span class="hero-badge">5 → 50 Leads/Day</span>
+      <span class="hero-badge">Indian Market + Global</span>
+    </div>
+  </div>
+
+  <div class="nav-grid">
+    <div class="nav-btn active" onclick="showSection('audience', this)"><div class="nb-icon">◎</div><div class="nb-label">Target Audience</div></div>
+    <div class="nav-btn" onclick="showSection('social', this)"><div class="nb-icon">◉</div><div class="nb-label">Social Media Plan</div></div>
+    <div class="nav-btn" onclick="showSection('funnel', this)"><div class="nb-icon">▽</div><div class="nb-label">Ads Full Funnel</div></div>
+    <div class="nav-btn" onclick="showSection('leads', this)"><div class="nb-icon">◈</div><div class="nb-label">Lead Generation</div></div>
+    <div class="nav-btn" onclick="showSection('positioning', this)"><div class="nb-icon">◆</div><div class="nb-label">Brand Positioning</div></div>
+    <div class="nav-btn" onclick="showSection('metrics', this)"><div class="nb-icon">◐</div><div class="nb-label">KPIs & Metrics</div></div>
+    <div class="nav-btn" onclick="showSection('scaling', this)"><div class="nb-icon">↑</div><div class="nb-label">Scaling Strategy</div></div>
+  </div>
+
+  <!-- SECTION 1: AUDIENCE -->
+  <div class="section active" id="s-audience">
+    <div class="sec-header"><h2>1. Target Audience Strategy</h2><p>Who to reach, where to find them, and exactly how to target them.</p></div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Primary Audience — Aspiring Parents</h3>
+        <p style="margin-bottom:8px;"><strong>Who:</strong> Mothers aged 24–40 with children aged 2–15</p>
+        <ul>
+          <li>Household income ₹6L–₹25L/year</li>
+          <li>Tier 1 cities: Delhi NCR, Mumbai, Bengaluru, Hyderabad, Chennai, Pune</li>
+          <li>Tier 2: Jaipur, Lucknow, Chandigarh, Kochi, Ahmedabad</li>
+          <li>Mindset: Ambitious, want child to have "extra edge"</li>
+          <li>Already in: dance classes, hobby classes, school events</li>
+          <li>Scrolls Instagram for parenting, lifestyle, celeb kids</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Secondary Audience — Aspirational Discoverers</h3>
+        <p style="margin-bottom:8px;"><strong>Who:</strong> Fathers + grandparents aged 30–55</p>
+        <ul>
+          <li>Influence purchasing decisions in joint families</li>
+          <li>Income: ₹10L+ (decision-makers)</li>
+          <li>Facebook-heavy (45+ age group)</li>
+          <li>Respond to: brand credibility, safety, ROI for child</li>
+          <li>Triggered by: "seen a child model on TV or ad"</li>
+          <li>Trust news articles, testimonials, brand logos</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Meta Ads — Detailed Targeting Setup</h3>
+      <div class="two-col" style="margin-top:8px;">
+        <div>
+          <p style="font-weight:500; margin-bottom:6px; font-size:13px;">Demographics</p>
+          <ul>
+            <li>Age: 24–42 (Mothers primary), 30–50 (Fathers)</li>
+            <li>Gender: Female primary, All for retargeting</li>
+            <li>Location: India → Tier 1 + Tier 2 cities radius 30km</li>
+            <li>Language: Hindi + English speakers</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:500; margin-bottom:6px; font-size:13px;">Parenting interests</p>
+          <ul>
+            <li>Parenting, Baby & children products, Kids Fashion</li>
+            <li>FirstCry, Hopscotch, Mothercare shoppers</li>
+            <li>Child development, school admissions, tuition</li>
+            <li>Indian school PTM groups, mom communities</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:500; margin-bottom:6px; font-size:13px;">Behaviors</p>
+          <ul>
+            <li>Engaged shoppers on Amazon, Flipkart (kids)</li>
+            <li>Facebook group members: Indian Moms, Parents</li>
+            <li>YouTube viewers: child acting, kids talent shows</li>
+            <li>Instagram followers of kid influencers</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:500; margin-bottom:6px; font-size:13px;">Lookalike audiences</p>
+          <ul>
+            <li>1–3% LAL from existing enquiry list</li>
+            <li>1% LAL from website visitors (30 days)</li>
+            <li>2% LAL from WhatsApp opt-ins</li>
+            <li>Broad + Interest stacking test</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Google Ads — Keyword Strategy</h3>
+      <div class="three-col" style="margin-top:8px;">
+        <div>
+          <p style="font-weight:500; font-size:13px; margin-bottom:6px;">High-intent (Exact/Phrase)</p>
+          <ul>
+            <li>"child modelling agency India"</li>
+            <li>"kids modelling agency Delhi"</li>
+            <li>"baby model registration"</li>
+            <li>"child actor audition 2025"</li>
+            <li>"kids brand shoot agency"</li>
+            <li>"toddler model agency"</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:500; font-size:13px; margin-bottom:6px;">Mid-intent (Broad Match)</p>
+          <ul>
+            <li>"how to get my child into modelling"</li>
+            <li>"child portfolio photography"</li>
+            <li>"kids talent agency India"</li>
+            <li>"child acting classes Delhi"</li>
+            <li>"TV commercial kids audition"</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:500; font-size:13px; margin-bottom:6px;">Branded + Competitor</p>
+          <ul>
+            <li>"Green Media Network"</li>
+            <li>"[competitor agency name]" (MOFU)</li>
+            <li>"best child modelling agency"</li>
+            <li>"trusted kids agency review"</li>
+            <li>"child modelling agency Noida"</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="divider">
+      <p style="font-size:13px; color:var(--color-text-secondary);">Negative keywords to add: "adult modelling", "free child modelling", "child modelling scam" (block irrelevant traffic). Set bid strategy: Maximize Conversions → switch to Target CPA once 30+ conversions collected.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: SOCIAL MEDIA -->
+  <div class="section" id="s-social">
+    <div class="sec-header"><h2>2. Social Media Growth Plan</h2><p>Instagram + Facebook content strategy with 14-day calendar and viral formats.</p></div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Instagram Content Pillars</h3>
+        <ul>
+          <li><strong>Pillar 1 – Behind the Scenes (25%):</strong> Real shoot days, casting calls, kids on set. Builds authenticity.</li>
+          <li><strong>Pillar 2 – Success Stories (25%):</strong> Before/after child confidence, first booking, parent testimonials. Builds social proof.</li>
+          <li><strong>Pillar 3 – Education (20%):</strong> "How to enroll", "what happens at an audition". Reduces fear.</li>
+          <li><strong>Pillar 4 – Brand Portfolio (20%):</strong> Shots with Max Fashion, FirstCry, Nestle logos. Builds credibility.</li>
+          <li><strong>Pillar 5 – Trends/Engagement (10%):</strong> Trending audio Reels, "which kid is this?" polls.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Facebook Strategy</h3>
+        <ul>
+          <li><strong>Facebook Groups:</strong> Share value posts in Indian Parenting groups daily (no spam — answer questions, post tips)</li>
+          <li><strong>Facebook Page:</strong> Repurpose Instagram Reels as Facebook Reels (same content, more reach)</li>
+          <li><strong>Facebook Stories:</strong> Daily "did you know?" + enquiry CTA</li>
+          <li><strong>Facebook Events:</strong> Create virtual "Open Audition" events monthly</li>
+          <li><strong>Facebook Ads:</strong> Video views + Lead Gen campaigns targeting 30+ parents</li>
+          <li><strong>Messenger Bots:</strong> Auto-reply with brochure + WhatsApp link</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>14-Day Content Calendar</h3>
+      <div class="cal-grid">
+        <div class="cal-day"><div class="cal-day-label">Day 1</div><div class="cal-type">Reel: "A day in the life of a child model at GMN"</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 2</div><div class="cal-type">Story: Poll — "Would you enroll your child?"</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 3</div><div class="cal-type">Post: Carousel — Brand logos GMN has worked with</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 4</div><div class="cal-type">Reel: Parent testimonial video (30 sec)</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 5</div><div class="cal-type">Story: Behind the scenes shoot day</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 6</div><div class="cal-type">Post: "5 signs your child has model potential"</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 7</div><div class="cal-type">Reel: Child's first shoot transformation</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 8</div><div class="cal-type">Post: FAQ — "Is modelling safe for kids?"</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 9</div><div class="cal-type">Story: Q&A box — parent questions</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 10</div><div class="cal-type">Reel: Trending audio + kids portfolio reveal</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 11</div><div class="cal-type">Post: "What brands look for in child models"</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 12</div><div class="cal-type">Reel: Casting call process walkthrough</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 13</div><div class="cal-type">Story: Countdown to "Open Audition" event</div></div>
+        <div class="cal-day"><div class="cal-day-label">Day 14</div><div class="cal-type">Post: "Meet 3 kids who booked their first deal"</div></div>
+      </div>
+      <p style="font-size:12px; color:var(--color-text-tertiary); margin-top:8px;">Post Reels: Mon/Wed/Fri/Sun. Stories: Daily. Carousels: Tue/Thu/Sat. Best times: 7–9am, 12–2pm, 8–10pm IST.</p>
+    </div>
+
+    <div class="card">
+      <h3>Viral Reel Hook Formats (First 3 seconds)</h3>
+      <ul>
+        <li><strong>Shock opener:</strong> "This 4-year-old just shot a Netflix ad. Here's how." [cut to kid on set]</li>
+        <li><strong>Curiosity gap:</strong> "We get 500+ applications a month. Only 12 kids get selected. Here's what we look for."</li>
+        <li><strong>Before/After:</strong> "Shy at home → Confident on set. Watch Arjun's transformation." [split screen]</li>
+        <li><strong>Parent POV:</strong> "As a mom, I had no idea how this worked. Then GMN changed everything."</li>
+        <li><strong>Trend hijack:</strong> Use trending audio + text overlay: "POV: Your 5-year-old just got their first brand deal"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 3: ADS FUNNEL -->
+  <div class="section" id="s-funnel">
+    <div class="sec-header"><h2>3. Full-Funnel Ads Structure</h2><p>3-phase Meta + Google + WhatsApp funnel with budgets, creatives, and messaging.</p></div>
+
+    <div class="funnel-vis">
+      <div class="funnel-layer fl-tofu"><div class="fl-left">TOFU — Awareness (Top of Funnel)</div><div class="fl-right">40% of budget · Cold audience</div></div>
+      <div class="funnel-layer fl-mofu"><div class="fl-left">MOFU — Consideration (Middle)</div><div class="fl-right">35% of budget · Warm audience</div></div>
+      <div class="funnel-layer fl-bofu"><div class="fl-left">BOFU — Conversion (Bottom)</div><div class="fl-right">25% of budget · Hot audience</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Phase 1 — TOFU: Build Awareness</h3>
+      <div class="two-col">
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Campaign objective</p>
+          <p style="font-size:13px; color:var(--color-text-secondary);">Video Views + Reach (Meta) / Display + YouTube (Google)</p>
+          <hr class="divider">
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Ad creatives</p>
+          <ul>
+            <li>15–30 sec Reels showing kids on real brand shoots</li>
+            <li>"Where potential gets discovered" brand video</li>
+            <li>Montage of logos: Netflix, FirstCry, Amazon, Nestle</li>
+            <li>Emotional parent testimonial (before/after story)</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Messaging angles</p>
+          <ul>
+            <li>"India's most trusted child talent agency"</li>
+            <li>"Your child could be the next face of [Brand]"</li>
+            <li>"Where dreams get discovered — not exploited"</li>
+            <li>"No prior experience needed. Just potential."</li>
+          </ul>
+          <hr class="divider">
+          <p style="font-size:13px; font-weight:500; margin-bottom:4px;">Budget split (example ₹30K/month)</p>
+          <p style="font-size:13px; color:var(--color-text-secondary);">₹12,000 → Meta Video Views<br>₹5,000 → Google Display/YouTube</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Phase 2 — MOFU: Build Consideration</h3>
+      <div class="two-col">
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Campaign objective</p>
+          <p style="font-size:13px; color:var(--color-text-secondary);">Traffic + Engagement + Lead Gen (Meta) / Search (Google)</p>
+          <hr class="divider">
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Ad creatives</p>
+          <ul>
+            <li>Carousel: "4-step process from application to first booking"</li>
+            <li>Video: "What happens at a GMN audition?" (walkthrough)</li>
+            <li>Static: Safety guarantee — "No upfront fees. Transparent process."</li>
+            <li>WhatsApp ad: "Ask us anything about enrollment →"</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Audience</p>
+          <ul>
+            <li>Website visitors (last 30 days)</li>
+            <li>Video viewers 25–75% from TOFU</li>
+            <li>Instagram profile visitors</li>
+            <li>Google Search: high-intent keywords</li>
+          </ul>
+          <hr class="divider">
+          <p style="font-size:13px; font-weight:500; margin-bottom:4px;">Budget</p>
+          <p style="font-size:13px; color:var(--color-text-secondary);">₹7,500 → Meta retargeting<br>₹3,000 → Google Search<br>₹2,000 → WhatsApp Click-to-Chat</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Phase 3 — BOFU: Drive Conversions</h3>
+      <div class="two-col">
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Campaign objective</p>
+          <p style="font-size:13px; color:var(--color-text-secondary);">Lead Generation + Conversions + WhatsApp Messages</p>
+          <hr class="divider">
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Ad creatives</p>
+          <ul>
+            <li>Native Lead Form: "Register your child for a free audition"</li>
+            <li>Limited slots urgency: "Only 8 spots left this month in Delhi"</li>
+            <li>Direct CTA: "WhatsApp us your child's photo now"</li>
+            <li>Offer-based: "Free portfolio shoot for selected applicants"</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Audience</p>
+          <ul>
+            <li>Lead form openers who didn't submit</li>
+            <li>WhatsApp starters who didn't book</li>
+            <li>Google branded search keywords</li>
+            <li>Cart abandoners (contact page visitors)</li>
+          </ul>
+          <hr class="divider">
+          <p style="font-size:13px; font-weight:500; margin-bottom:4px;">Budget</p>
+          <p style="font-size:13px; color:var(--color-text-secondary);">₹5,000 → Meta Lead Gen<br>₹2,500 → Google Brand Search<br>₹2,000 → WhatsApp retargeting</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: LEAD GEN -->
+  <div class="section" id="s-leads">
+    <div class="sec-header"><h2>4. Lead Generation & Conversion System</h2><p>Lead form, WhatsApp flow, and follow-up strategy to convert enquiries to office visits.</p></div>
+
+    <div class="card">
+      <h3>Ideal Lead Form Structure (Meta Native Form)</h3>
+      <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:10px;">Use "Higher Intent" form type. Ask 5–7 questions to filter quality leads:</p>
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Child's name and age</strong> — Dropdown: 0–2, 3–5, 6–9, 10–15. Pre-fills from Facebook profile.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Your city</strong> — Delhi NCR / Mumbai / Bengaluru / Hyderabad / Other. Filters geography.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>What are you looking for?</strong> — Modelling / Acting / Brand Shoots / All of the above. Qualifies intent.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Has your child done any modelling/acting before?</strong> — Yes / No. Segments beginner vs. experienced.</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Phone number + WhatsApp number</strong> — Mandatory. Enables direct follow-up.</div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-body"><strong>Best time to call?</strong> — Morning / Afternoon / Evening. Improves connect rate significantly.</div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-body"><strong>Confirmation screen:</strong> "Thank you! Our team will reach out within 24 hours. Meanwhile, join our WhatsApp community." [Link]</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>WhatsApp Conversation Flow (Conversion Script)</h3>
+      <div class="wa-chat">
+        <div class="wa-label">GMN Team (within 5 min of lead)</div>
+        <div class="wa-bubble wa-out">Hi [Name]! 👋 I'm Priya from Green Media Network. I saw your enquiry about enrolling [child name] — that's wonderful! May I share a quick overview of our process?</div>
+        <div class="wa-bubble wa-in">Yes please!</div>
+        <div class="wa-bubble wa-out">Great! At GMN, we work with brands like Netflix, FirstCry, Amazon & more. Our process is: 1) Free application 2) Relaxed audition 3) Professional training 4) Brand bookings. No hidden fees. Can I ask — what drew you to GMN specifically?</div>
+        <div class="wa-bubble wa-in">I saw your Instagram. My daughter is 6 and loves posing!</div>
+        <div class="wa-bubble wa-out">That's perfect! 6 is a great age. We'd love to assess her potential. Can you share 2-3 casual photos of her — just natural shots, no studio needed? Our casting team will review within 48 hours. 📸</div>
+        <div class="wa-bubble wa-out">Also, we have a free orientation session this Saturday at our Noida office where you can meet the team and see our work. Would that work for you?</div>
+      </div>
+      <p style="font-size:12px; color:var(--color-text-tertiary); margin-top:8px;">Key principles: respond within 5 min, personalise with child's name, create low-friction next step (photo → office visit).</p>
+    </div>
+
+    <div class="card">
+      <h3>Follow-Up Sequence (7 Days)</h3>
+      <div class="step-list">
+        <div class="step"><div class="step-num">D0</div><div class="step-body"><strong>Within 5 minutes:</strong> WhatsApp welcome message + intro PDF/brochure link. No sales pitch yet.</div></div>
+        <div class="step"><div class="step-num">D1</div><div class="step-body"><strong>Call attempt 1</strong> at preferred time. If no answer, WhatsApp: "Hi [Name], tried calling — is there a better time?"</div></div>
+        <div class="step"><div class="step-num">D2</div><div class="step-body"><strong>Send social proof:</strong> Share 2 parent testimonial videos on WhatsApp. "Here's what other parents are saying."</div></div>
+        <div class="step"><div class="step-num">D3</div><div class="step-body"><strong>Call attempt 2.</strong> If connected: qualify, handle objections, pitch the office visit / audition slot.</div></div>
+        <div class="step"><div class="step-num">D5</div><div class="step-body"><strong>Retargeting ad activates</strong> — show testimonial ad to this contact via Custom Audience (phone number match).</div></div>
+        <div class="step"><div class="step-num">D7</div><div class="step-body"><strong>Final WhatsApp:</strong> "We have 2 open slots remaining for this month's batch in [city]. Would you like us to reserve one for [child name]?"</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: POSITIONING -->
+  <div class="section" id="s-positioning">
+    <div class="sec-header"><h2>5. Positioning & Brand Strategy</h2><p>3 unique angles, 20+ ad hooks, and trust-building elements.</p></div>
+
+    <div class="three-col">
+      <div class="card">
+        <h3>Angle 1: Safety-First Agency</h3>
+        <p>"We're the only child talent agency in India with a transparent, no-exploitation guarantee. Every shoot is parent-supervised. No upfront fees. Ever."</p>
+        <hr class="divider">
+        <p style="font-size:12px; color:var(--color-text-tertiary);">Counters: parent fear of scams, fake agencies, child exploitation. Most searched concern.</p>
+      </div>
+      <div class="card">
+        <h3>Angle 2: Confidence Builder</h3>
+        <p>"We don't just book your child for shoots — we develop them. Our training program builds life-long confidence, communication skills, and presence."</p>
+        <hr class="divider">
+        <p style="font-size:12px; color:var(--color-text-tertiary);">Resonates with: education-focused parents who want holistic child development, not just fame.</p>
+      </div>
+      <div class="card">
+        <h3>Angle 3: Real Brands, Real Results</h3>
+        <p>"Our kids have appeared in ads for Netflix, Amazon, Nestle, Max Fashion and more. We're not a portfolio studio — we're a real booking agency."</p>
+        <hr class="divider">
+        <p style="font-size:12px; color:var(--color-text-tertiary);">Differentiates from: portfolio photography studios disguised as agencies. Shows outcomes.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>20 High-Converting Ad Hooks</h3>
+      <div class="hook-grid">
+        <div class="hook-item"><div class="hook-num">#01</div><div class="hook-text">"Your child could be on the next FirstCry ad. Here's how."</div></div>
+        <div class="hook-item"><div class="hook-num">#02</div><div class="hook-text">"We get 500 applications. Only 15 kids get selected. Is yours one of them?"</div></div>
+        <div class="hook-item"><div class="hook-num">#03</div><div class="hook-text">"That shy kid you see at home? Brands call it natural. We call it talent."</div></div>
+        <div class="hook-item"><div class="hook-num">#04</div><div class="hook-text">"No studio photos needed. Just send us 3 casual pics of your child."</div></div>
+        <div class="hook-item"><div class="hook-num">#05</div><div class="hook-text">"Worried about fake agencies? Here's what makes GMN different."</div></div>
+        <div class="hook-item"><div class="hook-num">#06</div><div class="hook-text">"This 5-year-old just finished her 3rd brand shoot. Her mom had zero experience in this industry."</div></div>
+        <div class="hook-item"><div class="hook-num">#07</div><div class="hook-text">"We don't charge upfront. We earn when your child earns. That's our promise."</div></div>
+        <div class="hook-item"><div class="hook-num">#08</div><div class="hook-text">"Most parents wait until their child 'grows up.' The top brands want them now."</div></div>
+        <div class="hook-item"><div class="hook-num">#09</div><div class="hook-text">"The audition feels like a playdate. We designed it that way."</div></div>
+        <div class="hook-item"><div class="hook-num">#10</div><div class="hook-text">"Kya aapka baccha next Amazon ad star hai?" [Hindi hook for Tier 2]</div></div>
+        <div class="hook-item"><div class="hook-num">#11</div><div class="hook-text">"Stop wondering. In 48 hours, our team will tell you if your child has what it takes."</div></div>
+        <div class="hook-item"><div class="hook-num">#12</div><div class="hook-text">"Every child in our agency came from a parent just like you — curious, careful, and hopeful."</div></div>
+        <div class="hook-item"><div class="hook-num">#13</div><div class="hook-text">"We worked with Netflix. And our next star could be your 7-year-old."</div></div>
+        <div class="hook-item"><div class="hook-num">#14</div><div class="hook-text">"You don't need connections. You just need to apply."</div></div>
+        <div class="hook-item"><div class="hook-num">#15</div><div class="hook-text">"Where potential gets discovered. — Not exploited."</div></div>
+        <div class="hook-item"><div class="hook-num">#16</div><div class="hook-text">"Open auditions this month in Delhi NCR. Only 8 spots available."</div></div>
+        <div class="hook-item"><div class="hook-num">#17</div><div class="hook-text">"Your child's first brand shoot could happen in 30 days. Here's the process."</div></div>
+        <div class="hook-item"><div class="hook-num">#18</div><div class="hook-text">"From application to Amazon — Rohan's story in 60 seconds."</div></div>
+        <div class="hook-item"><div class="hook-num">#19</div><div class="hook-text">"Other agencies take your money. We take your child's future seriously."</div></div>
+        <div class="hook-item"><div class="hook-num">#20</div><div class="hook-text">"Register for free. No commitment. Just discover what's possible."</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Trust-Building Elements (Website + Ads)</h3>
+      <div class="two-col">
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">On website</p>
+          <ul>
+            <li>Brand logos wall (Netflix, Amazon, FirstCry etc.) — above the fold</li>
+            <li>GST number + registered address displayed in footer</li>
+            <li>Video testimonials from 5+ parents (not just text)</li>
+            <li>"No upfront fee" badge prominently placed</li>
+            <li>Process explained in 4 simple steps</li>
+            <li>Team photos with names and roles</li>
+            <li>Media mentions or press coverage (create if needed)</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">In ads</p>
+          <ul>
+            <li>Show real audition/shoot footage (not stock)</li>
+            <li>Parent face + name in testimonials (not anonymous)</li>
+            <li>Counter: "1200+ children enrolled" (use real numbers)</li>
+            <li>Facebook verified page tick visible</li>
+            <li>WhatsApp number (not a form) as primary CTA</li>
+            <li>Safety language: "Parent must be present at all times"</li>
+            <li>Transparency: mention "No fees until booking"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: METRICS -->
+  <div class="section" id="s-metrics">
+    <div class="sec-header"><h2>6. Performance Metrics & KPIs</h2><p>CPL benchmarks, key KPIs to track, and optimization playbook.</p></div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="stat-label">Meta CPL target</div><div class="stat-value">₹80–200</div><div class="stat-note">Lead Gen objective</div></div>
+      <div class="stat"><div class="stat-label">Google CPL target</div><div class="stat-value">₹150–350</div><div class="stat-note">Search campaigns</div></div>
+      <div class="stat"><div class="stat-label">WhatsApp CPL</div><div class="stat-value">₹60–180</div><div class="stat-note">Click-to-WhatsApp</div></div>
+      <div class="stat"><div class="stat-label">Target CTR (Meta)</div><div class="stat-value">1.5–3%</div><div class="stat-note">Industry avg: 0.9%</div></div>
+      <div class="stat"><div class="stat-label">Lead → Visit rate</div><div class="stat-value">15–25%</div><div class="stat-note">With good follow-up</div></div>
+      <div class="stat"><div class="stat-label">Visit → Enroll</div><div class="stat-value">40–60%</div><div class="stat-note">Consultative close</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Core KPIs Dashboard — Track Weekly</h3>
+      <table class="kpi-table">
+        <tr><th>Metric</th><th>Platform</th><th>Target</th><th>Action if below</th></tr>
+        <tr><td>Cost per Lead (CPL)</td><td>Meta / Google</td><td class="val">₹80–200</td><td>Test new creative, narrow audience</td></tr>
+        <tr><td>Click-Through Rate (CTR)</td><td>Meta</td><td class="val">1.5%+</td><td>Rewrite hook, change thumbnail</td></tr>
+        <tr><td>Lead Quality Score</td><td>CRM / Sheets</td><td class="val">60%+ contactable</td><td>Tighten form questions</td></tr>
+        <tr><td>Connect Rate (calls)</td><td>Sales team</td><td class="val">40%+</td><td>Call at preferred time, SMS before</td></tr>
+        <tr><td>Appointment Set Rate</td><td>Sales team</td><td class="val">20%+ of leads</td><td>Improve WhatsApp script</td></tr>
+        <tr><td>Show Rate (visits)</td><td>Offline</td><td class="val">70%+ of bookings</td><td>Send reminder 24hr + 2hr before</td></tr>
+        <tr><td>Enrollment Rate</td><td>Offline</td><td class="val">40%+ of visits</td><td>Refine sales script, offer</td></tr>
+        <tr><td>CAC (Customer Acquisition Cost)</td><td>All</td><td class="val">₹1,500–4,000</td><td>Check full funnel for leaks</td></tr>
+        <tr><td>ROAS / Revenue per lead</td><td>All</td><td class="val">3x+ ad spend</td><td>Scale winning campaigns</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Ad Optimization Playbook</h3>
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Week 1–2 (Learning phase):</strong> Run 3–5 ad variations per audience. Do NOT change anything. Let Meta's algorithm exit the learning phase (50 optimization events needed).</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Week 3 (First cut):</strong> Kill ads with CTR below 0.8% or CPL 2x target. Pause underperforming audiences. Increase budget on winners by 20%.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Week 4+ (Scale):</strong> Duplicate winning ad sets. Increase budget max 20%/day. Introduce new creatives in a fresh ad set — never edit live winning ads.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Monthly creative refresh:</strong> Even winning creatives fatigue after 4–6 weeks. Rotate new hooks, new faces, new messaging angles. Keep the winning structure, change the content.</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Frequency watch:</strong> When frequency exceeds 3.5 on Meta, CPL rises sharply. Expand audience or introduce new creatives immediately.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: SCALING -->
+  <div class="section" id="s-scaling">
+    <div class="sec-header"><h2>7. Scaling Strategy</h2><p>From 5 to 50 leads/day — budget plan, creative testing, and growth milestones.</p></div>
+
+    <div class="card">
+      <h3>Phase-by-Phase Scaling Roadmap</h3>
+      <div class="scale-row">
+        <div class="scale-box">Month 1</div>
+        <div class="scale-arrow">→</div>
+        <div class="scale-desc"><strong>5–10 leads/day.</strong> Budget: ₹500–800/day. Focus: 1 Meta campaign (Lead Gen), 1 Google Search campaign, manual WhatsApp follow-up. Identify 2–3 winning creatives.</div>
+      </div>
+      <div class="scale-row">
+        <div class="scale-box">Month 2</div>
+        <div class="scale-arrow">→</div>
+        <div class="scale-desc"><strong>15–25 leads/day.</strong> Budget: ₹1,500/day. Add retargeting layer (MOFU), WhatsApp Click-to-Chat ads, test 2 new cities. Install CRM (Zoho/Leadsquared) to track follow-ups.</div>
+      </div>
+      <div class="scale-row">
+        <div class="scale-box">Month 3</div>
+        <div class="scale-arrow">→</div>
+        <div class="scale-desc"><strong>30–40 leads/day.</strong> Budget: ₹3,000/day. Scale winning ad sets 20%/week. Add Google Display retargeting. Launch monthly "Open Audition" events to spike leads. Hire 1 dedicated sales caller.</div>
+      </div>
+      <div class="scale-row">
+        <div class="scale-box">Month 4–6</div>
+        <div class="scale-arrow">→</div>
+        <div class="scale-desc"><strong>50+ leads/day.</strong> Budget: ₹5,000–8,000/day. Full 3-phase funnel live. Influencer partnerships (parenting influencers 50K–500K). Regional language ads (Hindi, Tamil, Telugu). Begin UAE/UK outreach.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Creative Testing Framework (Always-On)</h3>
+      <div class="two-col">
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Weekly testing structure</p>
+          <ul>
+            <li>Test 3 hooks per week (first 3 seconds differ, rest same)</li>
+            <li>Test 2 CTAs per week ("Register free" vs "WhatsApp us")</li>
+            <li>Test 2 audience segments (interest vs LAL)</li>
+            <li>1 winner declared after 5,000 impressions minimum</li>
+            <li>Winners: scale. Losers: archive (don't delete — data)</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size:13px; font-weight:500; margin-bottom:6px;">Video creative rules</p>
+          <ul>
+            <li>Always show a real child (not stock/illustration)</li>
+            <li>First frame: child's face or emotional parent moment</li>
+            <li>Captions ON — 85% watch without sound</li>
+            <li>Under 30 seconds for Reels ads</li>
+            <li>End with 1 clear CTA + WhatsApp number on screen</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Budget Scaling Plan</h3>
+      <table class="kpi-table">
+        <tr><th>Phase</th><th>Daily Budget</th><th>Monthly Budget</th><th>Expected Leads/Day</th><th>Key Channel</th></tr>
+        <tr><td>Starter</td><td class="val">₹500</td><td>₹15,000</td><td>5–10</td><td>Meta Lead Gen</td></tr>
+        <tr><td>Growth</td><td class="val">₹1,500</td><td>₹45,000</td><td>15–25</td><td>Meta + WhatsApp</td></tr>
+        <tr><td>Scale</td><td class="val">₹3,000</td><td>₹90,000</td><td>30–40</td><td>Full Funnel</td></tr>
+        <tr><td>Accelerate</td><td class="val">₹6,000+</td><td>₹1.8L+</td><td>50+</td><td>Multi-channel</td></tr>
+      </table>
+      <p style="font-size:12px; color:var(--color-text-tertiary); margin-top:8px;">Rule: Never increase budget more than 20% per day on a single ad set. Duplicate the ad set instead for faster scaling without triggering learning phase reset.</p>
+    </div>
+
+    <div class="card">
+      <h3>Global Expansion Path (Month 6+)</h3>
+      <ul>
+        <li><strong>UAE/Dubai:</strong> Large Indian diaspora. Create English + Arabic ads. Partner with local parenting influencers. Registration can stay India-based.</li>
+        <li><strong>UK/Canada:</strong> Indian community events + Facebook groups. Target "NRI parents" interest segment.</li>
+        <li><strong>Website:</strong> Add multilingual pages (Hindi, Tamil, Telugu, Arabic) for SEO and ad landing pages.</li>
+        <li><strong>PR strategy:</strong> Get coverage in Times of India, Hindustan Times parenting sections. One article = 10x trust for ads.</li>
+        <li><strong>Influencer strategy:</strong> Partner with 5–10 parenting influencers (50K–2M followers) on performance deals (₹2–5K per qualified lead).</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
